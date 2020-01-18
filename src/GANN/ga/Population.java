@@ -1,7 +1,9 @@
+package GeneticAlgorithm;
+
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-public class Population {
+class Population {
 
     int popSize = 10;
     Unit[] population;
