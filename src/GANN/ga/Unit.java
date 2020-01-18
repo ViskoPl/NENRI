@@ -1,37 +1,50 @@
 package ga;
 
+import net.NN;
+
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Unit implements Comparable<Unit> {
-    DoubleGene[] bArray = new DoubleGene[5];
+    double[] weightArray;
     double error = 0;
     double fitness = 0;
+    private NN net;
     static Random r = new Random();
 
-    Unit(DoubleGene ...array) throws FileNotFoundException {
+    Unit(double[] array, NN net) {
         super();
-        this.bArray = array;
+        this.weightArray = array;
+        this.net = net;
         this.calculateError();
     }
 
-    Unit() throws FileNotFoundException {
+    Unit(NN net) {
         super();
-
+        this.net = net;
+        this.weightArray = new double[net.getNumberOfParameters()];
         generateUnit();
         this.calculateError();
     }
 
+    private void calculateError() {
+        this.error = net.calcError(this.weightArray);
 
-    void generateUnit() {
-
-        for(int i = 0; i < 5; i++) {
-            bArray[i] = new DoubleGene(-4 + (4 - -4) * r.nextDouble());
-        }
+        this.fitness = 1/this.error;
     }
 
-    DoubleGene getGene(int position) {
-        return this.bArray[position];
+
+    void generateUnit() {
+        for(int i = 0; i < this.net.getNumberOfParameters(); i++) {
+            weightArray[i] = 0 + (1 - 0) * r.nextDouble();
+        }
+
+        calculateError();
+    }
+
+    double getWeight(int position) {
+        return this.weightArray[position];
     }
 
     double getError() {
@@ -42,51 +55,81 @@ public class Unit implements Comparable<Unit> {
         return this.fitness;
     }
 
-    double func(double x, double y) {
-        return Math.sin(bArray[0].getValue() + bArray[1].getValue()*x) + bArray[2].getValue() * Math.cos(x * (bArray[3].getValue() + y))*(1/(1 + Math.exp(Math.pow(x - bArray[4].getValue(), 2))));
-    }
+    public Unit crossover3(Unit second) {
 
-    public void calculateError() throws FileNotFoundException {
-        double sum = 0;
-        for(int i = 0; i < 250; i++) {
-            sum += Math.pow(func(GeneticAlgorithm.currentMatrix[i][0], GeneticAlgorithm.currentMatrix[i][1]) - GeneticAlgorithm.currentMatrix[i][2], 2);
+        double[] array1 = this.weightArray;
+        double[] array2 = second.getWeightArray();
+        double[] array = new double[this.net.getNumberOfParameters()];
+        for(int i = 0; i < array1.length; i++) {
+            if(i % 2 == 0) {
+                array[i] = array1[i];
+            } else {
+                array[i] = array2[i];
+            }
         }
 
-        this.error = sum / 250;
-        this.fitness = 1 / this.error;
-    }
-
-    public static Unit crossover(Unit first, Unit second, double crossoverProbability) throws FileNotFoundException {
-        DoubleGene[] array = new DoubleGene[5];
-        for(int i = 0; i < 5; i++) {
-            array[i] = DoubleGene.crossover(first.getGene(i), second.getGene(i), crossoverProbability);
-        }
-
-        Unit offSpring = new Unit(array);
+        Unit offSpring = new Unit(array, this.net);
 
         return offSpring;
     }
 
-    public void mutate(double probability) throws FileNotFoundException {
-        for(int i = 0; i < 5; i++) {
-            bArray[i].mutate(probability);
+    public Unit crossover(Unit second) {
+
+        double[] array1 = this.weightArray;
+        double[] array2 = second.getWeightArray();
+        double[] array = new double[this.net.getNumberOfParameters()];
+        for(int i = 0; i < array1.length; i++) {
+            array[i] = r.nextDouble() < 0.5 ? array1[i] : array2[i];
+        }
+
+        Unit offSpring = new Unit(array, this.net);
+
+        return offSpring;
+    }
+
+    public Unit crossover2(Unit second) {
+        double[] array1 = this.weightArray;
+        double[] array2 = second.getWeightArray();
+        double[] array = new double[array1.length];
+        int random = r.nextInt(2);
+
+        for(int i = 0; i < array1.length; i++) {
+            array[i] = random==0 ? array1[i] : array2[i];
+        }
+
+
+        Unit offSpring = new Unit(array, this.net);
+
+        return offSpring;
+    }
+
+    public void mutate2(double probability, double sigma) {
+        for(int i = 0; i < weightArray.length; i++) {
+            if(r.nextDouble() < probability) {
+                weightArray[i] = r.nextGaussian() * sigma;
+            }
+        }
+
+        this.calculateError();
+    }
+
+    public void mutate(double probability, double sigma) {
+        for(int i = 0; i < weightArray.length; i++) {
+            if(r.nextDouble() < probability) {
+                weightArray[i] += r.nextGaussian() * sigma;
+            }
         }
 
         this.calculateError();
     }
 
     @Override
-    public String toString() {
-        String out = "";
-        for(int i = 0; i < bArray.length; i++) {
-            out += "B" + i + ": " + bArray[i].getValue() + " ";
-        }
-
-        return out;
-    }
-
-    @Override
     public int compareTo(Unit o) {
         return Double.compare(o.getFitness(), this.getFitness());
     }
+
+    public double[] getWeightArray() {
+        return weightArray;
+    }
+
 }

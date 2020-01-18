@@ -1,78 +1,57 @@
 package ga;
-import java.io.File;
+import net.NN;
+
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.Scanner;
 
 public class GeneticAlgorithm {
 
     Population population;
-    int populationSize = 0;
+    int populationSize;
     double mutationPropability;
-    boolean elitism = false;
-    int numberOfIterations = 0;
-    double crossOverProbability;
-    static double[][] currentMatrix;
-    int generationNumber = 1;
-    String selectionType;
+    boolean elitism;
+    double sigma;
+    NN net;
+    int printEvery;
+    int numberOfIterations;
+    Random r = new Random();
+    int[] t;
 
-    GeneticAlgorithm(int populationSize, double mutationProbability, boolean elitism, String dataset, int numberOfIterations, String selectionType, double crossOverProbility) throws FileNotFoundException {
+    public GeneticAlgorithm(int populationSize, double mutationProbability, boolean elitism, NN net, double sigma, int printEvery, int numberOfIterations, int... t) {
         super();
-        fillDataSets(dataset);
         this.populationSize = populationSize;
-        this.population = new Population(populationSize);
+        this.population = new Population(populationSize, net);
+        this.sigma = sigma;
         this.mutationPropability = mutationProbability;
         this.elitism= elitism;
+        this.net = net;
+        this.t = t;
         this.numberOfIterations = numberOfIterations;
-        this.selectionType = selectionType;
-        this.crossOverProbability = crossOverProbility;
+        this.printEvery = printEvery;
     }
 
-    void fillDataSets(String file) throws FileNotFoundException {
-        File file1 = new File(file);
-        GeneticAlgorithm.currentMatrix = new double[250][3];
-        int i = 0;
-        Scanner scanner = new Scanner(file1);
-        while (scanner.hasNextLine()) {
-            String[] values = scanner.nextLine().split("\t");
-            GeneticAlgorithm.currentMatrix[i][0] = Double.parseDouble(values[0]);
-            GeneticAlgorithm.currentMatrix[i][1] = Double.parseDouble(values[1]);
-            GeneticAlgorithm.currentMatrix[i][2] = Double.parseDouble(values[2]);
-            ++i;
-        }
-    }
-
-    void start() throws FileNotFoundException {
+    public void start() {
         int iterations = 1;
         while(population.getFittest().getError() > 10E-6) {
-            if(selectionType == "tournament") {
-                this.population.sort();
-                tournamentSelection();
-                if(iterations % 1000 == 0) {
-                    System.out.println("In the iteration " + iterations + " ==> Fittest unit is: " +  population.getFittest() + " " + population.getFittest().getError());
-                }
-            } else {
-                canonicalSelection();
-                if(iterations % 100 == 0) {
-                    System.out.println("In the iteration " + iterations + " ==> Fittest unit is: " +  population.getFittest() + " " +  population.getFittest().getError());
-                }
-            }
+            canonicalSelection();
 
             ++iterations;
-            ++this.generationNumber;
+
+            if(iterations % this.printEvery == 0) {
+                System.out.println("In the iteration " + iterations + " ==> Fittest unit is: " +  population.getFittest().getError());
+            }
+            if(iterations > this.numberOfIterations) {
+                break;
+            }
         }
 
-        System.out.println("In the iteration " + iterations + " ==> Fittest unit is: " +  population.getFittest());
-
-
-
-
+        System.out.println("End of optimisation ==> Fittest unit is: " +  population.getFittest().getError());
 
         return;
     }
 
-    private void canonicalSelection() throws FileNotFoundException {
+    private void canonicalSelection()  {
         Unit[] newPopulation = new Unit[populationSize];
         int offset = 0;
         if(elitism) {
@@ -80,34 +59,44 @@ public class GeneticAlgorithm {
             offset = 1;
         }
 
-        int selectNumberOfChildren = (int) (0.5 * (this.populationSize));
         this.population.sort();
         for(int i = offset; i < populationSize; i++) {
-            int[] indexes = rouletteWheelSelection(2, selectNumberOfChildren);
-            newPopulation[i] = Unit.crossover(population.getUnit(indexes[0]), population.getUnit(indexes[1]), crossOverProbability);
-            newPopulation[i].mutate(mutationPropability);
+            int[] indexes = rouletteWheelSelection(2, populationSize);
+            int type = r.nextInt(3 - 1 + 1) + 1;
+            if(type == 1) newPopulation[i] = population.getUnit(indexes[0]).crossover(population.getUnit(indexes[1]));
+            if(type == 2) newPopulation[i] = population.getUnit(indexes[0]).crossover2(population.getUnit(indexes[1]));
+            if(type == 3) newPopulation[i] = population.getUnit(indexes[0]).crossover3(population.getUnit(indexes[1]));
+
+            int mutationType = pickMutation();
+            if(mutationType == 0) newPopulation[i].mutate(mutationPropability, this.sigma);
+            if(mutationType == 1) newPopulation[i].mutate(mutationPropability, this.sigma + 2);
+            if(mutationType == 2) newPopulation[i].mutate2(mutationPropability, this.sigma);
+
         }
 
         this.population.setPopulation(newPopulation);
     }
 
 
-    private void tournamentSelection() throws FileNotFoundException {
-        Population tournament = new Population(3);
-        int[] indexes = rouletteWheelSelection(3, 100);
-
-        for (int i = 0; i < 3; i++) {
-            tournament.setUnit(i, population.getUnit(indexes[i]));
+    private int pickMutation() {
+        int totalSum = 0;
+        for (int i = 0; i < t.length; i++) {
+            totalSum += t[i];
         }
 
-        int indexOfWorst = tournament.getIndexOfWorst();
-        Unit newUnit = Unit.crossover(tournament.getFittest(), tournament.getSecondFittest(), crossOverProbability);
-        newUnit.mutate(mutationPropability);
-        this.population.setUnit(indexes[indexOfWorst], newUnit);
+        int index = r.nextInt(totalSum);
+        int sum = 0;
+        int i=0;
+        while(sum < index ) {
+            sum = sum + t[i++];
+        }
+
+        return Math.max(0, i-1);
+
+
     }
 
     private int[] rouletteWheelSelection(int numberOfUnitsToTake, int border) {
-        Random random = new Random();
         double totalFitness = this.population.getTotalFitness(border);
 
         int[] takenIndexes = new int[numberOfUnitsToTake];
@@ -116,7 +105,7 @@ public class GeneticAlgorithm {
         double runningSum = 0;
         int index = 0;
         for (int i = 0; i < numberOfUnitsToTake; i++) {
-            double randomValue = (totalFitness) * random.nextDouble();
+            double randomValue = (totalFitness) * r.nextDouble();
             index = 0;
             runningSum = 0;
             while (runningSum < randomValue) {
@@ -137,8 +126,10 @@ public class GeneticAlgorithm {
 
         }
 
-//        System.out.println(Arrays.toString(takenIndexes));
-
         return takenIndexes;
+    }
+
+    public double[] calculateOutput(double[] xy) {
+        return net.calculateOutput(population.getFittest().weightArray, xy);
     }
 }

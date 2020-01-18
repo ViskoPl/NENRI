@@ -13,10 +13,6 @@ class DoubleGene {
         this.fillBits(x);
     }
 
-    DoubleGene() {
-        super();
-    }
-
     void fillBits(double x) {
         double y = Math.abs(x);
         double wholePart = (int) y;
