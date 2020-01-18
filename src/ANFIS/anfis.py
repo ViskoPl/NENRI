@@ -38,6 +38,9 @@ class ANFIS:
     def get_pred(self):
         return self.pred
 
+    def set_rule(self,index, rule):
+        self.rules[index] = rule
+
     def update_pred(self, value):
         self.pred = value
 

@@ -1,6 +1,7 @@
 import random
 from functions import Function
 from anfis import ANFIS
+from rule import Rule
 from derivates import q_derivative, p_derivative, r_derivative, a_derivative_x, a_derivative_y, b_derivative_x, b_derivative_y
 import sys
 
@@ -47,19 +48,21 @@ def main():
                 second_antecedent = current_rule.get_second_antecedent()
                 consequense = current_rule.get_consequense()
                 consequense.set_p(consequense.get_p(
-                ) + learning_rate * p_derivative(point, system, function_value, current_rule))
+                ) - learning_rate * p_derivative(point, system, function_value, current_rule))
                 consequense.set_q(consequense.get_q(
-                ) + learning_rate * q_derivative(point, system, function_value, current_rule))
+                ) - learning_rate * q_derivative(point, system, function_value, current_rule))
                 consequense.set_r(consequense.get_r(
-                ) + learning_rate * r_derivative(point, system, function_value, current_rule))
+                ) - learning_rate * r_derivative(point, system, function_value, current_rule))
                 first_antecedent.set_a(
                     first_antecedent.get_a() + learning_rate * a_derivative_x(point, system, function_value, current_rule, index))
                 first_antecedent.set_b(first_antecedent.get_b(
-                ) + learning_rate * b_derivative_x(point, system, function_value, current_rule, index))
+                ) - learning_rate * b_derivative_x(point, system, function_value, current_rule, index))
                 second_antecedent.set_a(second_antecedent.get_a(
-                ) + learning_rate * a_derivative_y(point, system, function_value, current_rule, index))
+                ) - learning_rate * a_derivative_y(point, system, function_value, current_rule, index))
                 second_antecedent.set_b(second_antecedent.get_b(
-                ) + learning_rate * b_derivative_y(point, system, function_value, current_rule, index))
+                ) - learning_rate * b_derivative_y(point, system, function_value, current_rule, index))
+
+                system.set_rule(y, Rule(first_antecedent, second_antecedent, consequense))
 
             index += 1
 
