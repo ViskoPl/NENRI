@@ -1,5 +1,4 @@
-package lab5.layers;
-import lab5.helpers.np;
+package layers;
 
 import java.util.Random;
 

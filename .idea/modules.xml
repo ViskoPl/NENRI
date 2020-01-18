@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/src/GANN.iml" filepath="$PROJECT_DIR$/src/GANN.iml" />
       <module fileurl="file://$PROJECT_DIR$/src/nenri-visko.iml" filepath="$PROJECT_DIR$/src/nenri-visko.iml" />
     </modules>
   </component>

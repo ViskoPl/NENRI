@@ -1,4 +1,4 @@
-package GeneticAlgorithm;
+package ga;
 
 public interface IGeneticAlgorithm {
 }

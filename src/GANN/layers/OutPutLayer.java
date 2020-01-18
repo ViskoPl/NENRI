@@ -1,8 +1,6 @@
-package lab5.layers;
+package layers;
 
 import lab5.helpers.np;
-
-import java.util.Random;
 
 public class OutPutLayer implements ILayer {
     private int numberOfNodes;

@@ -1,4 +1,4 @@
-package lab5.helpers;
+package helpers;
 
 public class Tuple<X,Y> {
     private X x;

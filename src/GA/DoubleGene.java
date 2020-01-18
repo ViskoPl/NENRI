@@ -1,9 +1,7 @@
-package GeneticAlgorithm;
-
 import java.math.BigInteger;
 import java.util.Random;
 
-class DoubleGene {
+public class DoubleGene {
     int sign = 0;
     double left;
     double right;

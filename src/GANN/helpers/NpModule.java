@@ -2,7 +2,7 @@ package helpers;
 
 import java.util.Random;
 
-public class np {
+public class NpModule {
 
     private static Random random;
     private static long seed;

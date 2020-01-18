@@ -1,6 +1,5 @@
-package GeneticAlgorithm;
+package ga;
 
-import java.math.BigInteger;
 import java.util.Random;
 
 class DoubleGene {
