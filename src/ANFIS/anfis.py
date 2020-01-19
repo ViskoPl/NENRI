@@ -1,19 +1,19 @@
 import random
 from rule import Rule
-from functions import ConsequenceFunction, MemmberShipFunction, Function
+from functions import ConsequenceFunction, MemberShipFunction, Function
 
 
 class ANFIS:
 
     def __init__(self, number_of_rules):
         self.number_of_rules = int(number_of_rules)
-        self.rules = self.generate_rules(number_of_rules)
+        self.rules = self.generate_rules()
         self.pred = 0
 
-    def generate_rules(self, number_of_rules):
+    def generate_rules(self):
         rules = []
-        for i in range(0, int(number_of_rules)):
-            rules.append(Rule(MemmberShipFunction(random.uniform(0, 1), random.uniform(0, 1)), MemmberShipFunction(random.uniform(
+        for i in range(0, self.number_of_rules):
+            rules.append(Rule(MemberShipFunction(random.uniform(0, 1), random.uniform(0, 1)), MemberShipFunction(random.uniform(
                 0, 1), random.uniform(0, 1)), ConsequenceFunction(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1))))
 
         return rules

@@ -10,6 +10,7 @@ public class GeneticAlgorithm {
     Population population;
     int populationSize;
     double mutationPropability;
+    double mutationProbability2;
     boolean elitism;
     double sigma;
     NN net;
@@ -18,12 +19,13 @@ public class GeneticAlgorithm {
     Random r = new Random();
     int[] t;
 
-    public GeneticAlgorithm(int populationSize, double mutationProbability, boolean elitism, NN net, double sigma, int printEvery, int numberOfIterations, int... t) {
+    public GeneticAlgorithm(int populationSize, double mutationProbability, double mutationProbability2, boolean elitism, NN net, double sigma, int printEvery, int numberOfIterations, int... t) {
         super();
         this.populationSize = populationSize;
         this.population = new Population(populationSize, net);
         this.sigma = sigma;
         this.mutationPropability = mutationProbability;
+        this.mutationProbability2 = mutationProbability2;
         this.elitism= elitism;
         this.net = net;
         this.t = t;
@@ -39,14 +41,14 @@ public class GeneticAlgorithm {
             ++iterations;
 
             if(iterations % this.printEvery == 0) {
-                System.out.println("In the iteration " + iterations + " ==> Fittest unit is: " +  population.getFittest().getError());
+                System.out.println("In the iteration " + iterations + " ==> Fittest unit error is: " +  population.getFittest().getError());
             }
             if(iterations > this.numberOfIterations) {
                 break;
             }
         }
 
-        System.out.println("End of optimisation ==> Fittest unit is: " +  population.getFittest().getError());
+        System.out.println("End of optimisation ==> Fittest unit error is: " +  population.getFittest().getError());
 
         return;
     }
@@ -70,7 +72,7 @@ public class GeneticAlgorithm {
             int mutationType = pickMutation();
             if(mutationType == 0) newPopulation[i].mutate(mutationPropability, this.sigma);
             if(mutationType == 1) newPopulation[i].mutate(mutationPropability, this.sigma + 2);
-            if(mutationType == 2) newPopulation[i].mutate2(mutationPropability, this.sigma);
+            if(mutationType == 2) newPopulation[i].mutate2(mutationProbability2, this.sigma);
 
         }
 

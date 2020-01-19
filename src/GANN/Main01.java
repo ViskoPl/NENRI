@@ -10,14 +10,13 @@ import java.util.Scanner;
 public class Main01 {
 
     public static void main(String[] args) throws IOException {
-        int[] layers = new int[4];
+        int[] layers = new int[3];
         layers[0] = 2;
-        layers[1] = 6;
-        layers[2] = 6;
-        layers[3] = 3;
+        layers[1] = 8;
+        layers[2] = 3;
         Dataset set = new Dataset("./src/GANN/datasets/datasets.txt");
         NN net = new NN(layers, set);
-        GeneticAlgorithm demo = new GeneticAlgorithm(60, 0.1, true, net, 2, 250, 50000, 2, 1, 1);
+        GeneticAlgorithm demo = new GeneticAlgorithm(60, 0.1, 0.05, true, net, 2, 250, 100000, 2, 1, 1);
         demo.start();
 
         double[] xy = new double[2];

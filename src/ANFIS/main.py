@@ -6,7 +6,7 @@ from derivates import q_derivative, p_derivative, r_derivative, a_derivative_x, 
 import sys
 
 
-def generate_input_variables(number_of_input_variables, function):
+def generate_input_variables(function):
     in_variables = []
     for x in range(-4, 5):
         for y in range(-4, 5):
@@ -21,7 +21,7 @@ def main():
     learning_rate = float(sys.argv[2])
     type_of_backpropagation = sys.argv[3]
     function = Function()
-    input_variables = generate_input_variables(81, function)
+    input_variables = generate_input_variables(function)
 
     system = ANFIS(number_of_rules)
     index = 0

@@ -7,7 +7,7 @@ class Function:
         return (pow((point[0] - 1), 2) + pow((point[1] + 2), 2) - 5 * point[0] * point[1] + 3) * pow(math.cos(point[0]/5), 2)
 
 
-class MemmberShipFunction:
+class MemberShipFunction:
 
     def __init__(self, a, b):
         self.a = a

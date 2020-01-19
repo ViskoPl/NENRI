@@ -34,8 +34,11 @@ public class NN {
 
     public int getNumberOfParameters() {
         int number = 0;
-        for(int i = 0; i < this.layers.length -1; i++) {
+        for(int i = 0; i < this.layers.length-1; i++) {
             number += this.layers[i] * this.layers[i+1] + this.layers[i+1];
+            if(i == 1) {
+                number += 2 * layers[i];
+            }
             if(i != 0) {
                 number += this.layers[i];
             }
@@ -47,7 +50,7 @@ public class NN {
     double calculateDistance(double[] params) {
         double cal = 0;
         for(int i = 0; i < outputs.length; i++) {
-            cal += Math.abs(outputs[i] - params[i])/Math.abs(1);
+            cal += Math.abs(outputs[i] - params[i])/Math.abs(params[params.length - 1 - i]);
         }
 
         return 1/(1+cal);
@@ -73,10 +76,11 @@ public class NN {
         for(int i = 1; i < layers.length; i++) {
             y = new double[layers[i]];
             for(int j = 0; j < layers[i]; j++) {
-                double[] slice = ArrayHelpers.getSliceOfArray(params, previousLayerLastIndex + j * layers[i-1],previousLayerLastIndex + j * layers[i-1] + layers[i-1]);
                 if(i == 1) {
+                    double[] slice = ArrayHelpers.getSliceOfArray(params, previousLayerLastIndex + j * layers[i-1],previousLayerLastIndex + j * layers[i-1] + layers[i-1] + 2);
                     y[j] = calculateDistance(slice);
                 } else {
+                    double[] slice = ArrayHelpers.getSliceOfArray(params, previousLayerLastIndex + j * layers[i-1],previousLayerLastIndex + j * layers[i-1] + layers[i-1]);
                     y[j] = calculateSigm(slice);
                 }
             }
