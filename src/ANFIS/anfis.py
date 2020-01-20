@@ -46,11 +46,16 @@ class ANFIS:
 
     def value(self, point):
         value1 = 0
-        value2 = 0
         for rule in self.rules:
-            value1 += rule.get_first_antecedent().value(point[0]) * rule.get_second_antecedent(
-            ).value(point[1]) * rule.get_consequense().value(point)
-            value2 += rule.get_first_antecedent().value(point[0]) * rule.get_second_antecedent(
-            ).value(point[1])
-        self.update_pred(value1/value2)
-        return value1/value2
+            value1 += rule.value(point)
+        result = value1/self.normalize_value(point)
+        self.update_pred(result)
+        return result
+
+    def calc_error(self, function, variables):
+        error = 0
+        for variable in variables:
+            error += pow(variable[2] - self.value((variable[0], variable[1])), 2)/2
+
+        return error
+
