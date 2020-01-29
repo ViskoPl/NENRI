@@ -1,11 +1,10 @@
 package Simulator.Decoders;
 
-import zad1.DomainElement;
-import zad1.SimpleDomain;
-import zad2.IFuzzySet;
+import FuzzyOperations.zad1.DomainElement;
+import FuzzyOperations.zad2.IFuzzySet;
+import FuzzyOperations.zad2.MutableFuzzySet;
 
 public class COADefuzzifier implements IDecoder {
-    int[] values;
 
     public COADefuzzifier() {
         super();
@@ -15,8 +14,9 @@ public class COADefuzzifier implements IDecoder {
     public double decode(IFuzzySet set) {
         double upperSum = 0;
         double lowerSum = 0;
-        for(DomainElement x: set.getDomain()) {
-            upperSum += set.getValueAt(x) * x.getComponentValue(0);
+        MutableFuzzySet set1 = ((MutableFuzzySet) set);
+        for(DomainElement x: set1.getDomain()) {
+            upperSum += set.getValueAt(x) * x.getValues()[0];
             lowerSum += set.getValueAt(x);
         }
 

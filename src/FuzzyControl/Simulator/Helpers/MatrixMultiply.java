@@ -1,15 +1,14 @@
 package Simulator.Helpers;
 
-import zad1.Domain;
-import zad1.DomainElement;
-import zad2.IFuzzySet;
-import zad2.MutableFuzzySet;
+import FuzzyOperations.zad1.DomainElement;
+import FuzzyOperations.zad2.IFuzzySet;
+import FuzzyOperations.zad2.MutableFuzzySet;
 
 public class MatrixMultiply {
     public static IFuzzySet MatrixMultiply(IFuzzySet set, double multiplier) {
         IFuzzySet newSet = new MutableFuzzySet(set.getDomain());
 
-        for(int i = 0; i < set.getDomain().getCardinality(); i++) {
+        for(int i = set.getDomain().getFirst(); i < set.getDomain().getLast(); i++) {
             ((MutableFuzzySet) newSet).set(DomainElement.of(i), set.getValueAt(DomainElement.of(i)) * multiplier);
         }
 

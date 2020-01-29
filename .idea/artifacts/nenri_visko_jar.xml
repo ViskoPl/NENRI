@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="nenri-visko:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/nenri_visko_jar</output-path>
+    <root id="archive" name="nenri-visko.jar">
+      <element id="module-output" name="nenri-visko" />
+    </root>
+  </artifact>
+</component>

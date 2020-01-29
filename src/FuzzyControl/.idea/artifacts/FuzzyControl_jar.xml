@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FuzzyControl:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FuzzyControl_jar</output-path>
+    <root id="archive" name="FuzzyControl.jar">
+      <element id="module-output" name="FuzzyControl" />
+    </root>
+  </artifact>
+</component>

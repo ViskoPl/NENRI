@@ -1,7 +1,7 @@
 package Simulator.Rules;
 
-import zad3.IUnaryFunction;
-import zad3.Operations;
+import FuzzyOperations.zad3.IUnaryFunction;
+import FuzzyOperations.zad3.Operations;
 
 public class UnaryRule implements IRule {
         IRule rule1;

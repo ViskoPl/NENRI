@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_fuzzycontrol" default="compile.module.fuzzycontrol">
+  <dirname property="module.fuzzycontrol.basedir" file="${ant.file.module_fuzzycontrol}"/>
+  
+  <property name="module.jdk.home.fuzzycontrol" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.fuzzycontrol" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.fuzzycontrol" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.fuzzycontrol" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="fuzzycontrol.output.dir" value="${module.fuzzycontrol.basedir}/out/production/FuzzyControl"/>
+  <property name="fuzzycontrol.testoutput.dir" value="${module.fuzzycontrol.basedir}/out/test/FuzzyControl"/>
+  
+  <path id="fuzzycontrol.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="fuzzycontrol.module.production.classpath">
+    <path refid="${module.jdk.classpath.fuzzycontrol}"/>
+  </path>
+  
+  <path id="fuzzycontrol.runtime.production.module.classpath">
+    <pathelement location="${fuzzycontrol.output.dir}"/>
+  </path>
+  
+  <path id="fuzzycontrol.module.classpath">
+    <path refid="${module.jdk.classpath.fuzzycontrol}"/>
+    <pathelement location="${fuzzycontrol.output.dir}"/>
+  </path>
+  
+  <path id="fuzzycontrol.runtime.module.classpath">
+    <pathelement location="${fuzzycontrol.testoutput.dir}"/>
+    <pathelement location="${fuzzycontrol.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.fuzzycontrol">
+    <patternset refid="ignored.files"/>
+    <exclude name="out/**"/>
+    <exclude name="out/artifacts/**"/>
+    <exclude name="out/artifacts/FuzzyControl_jar/**"/>
+    <exclude name="out/production/**"/>
+    <exclude name="out/production/FuzzyControl/**"/>
+    <exclude name="out/production/FuzzyControl/.idea/**"/>
+    <exclude name="out/production/FuzzyControl/.idea/artifacts/**"/>
+    <exclude name="out/production/FuzzyControl/.idea/libraries/**"/>
+    <exclude name="out/production/FuzzyControl/META-INF/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator/Rules/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator/Helpers/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator/Systems/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator/Decoders/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator/Databases/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator-1/**"/>
+    <exclude name="out/production/FuzzyControl/Simulator-1/META-INF/**"/>
+    <exclude name="out/production/FuzzyControl/FuzzyRelations/**"/>
+    <exclude name="out/production/FuzzyControl/FuzzyRelations/zad4/**"/>
+    <exclude name="out/production/FuzzyControl/FuzzyOperations/**"/>
+    <exclude name="out/production/FuzzyControl/FuzzyOperations/zad1/**"/>
+    <exclude name="out/production/FuzzyControl/FuzzyOperations/zad2/**"/>
+    <exclude name="out/production/FuzzyControl/FuzzyOperations/zad3/**"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.fuzzycontrol">
+    <patternset refid="excluded.from.module.fuzzycontrol"/>
+  </patternset>
+  
+  <path id="fuzzycontrol.module.sourcepath">
+    <dirset dir="${module.fuzzycontrol.basedir}/../../src">
+      <include name="FuzzyControl"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.fuzzycontrol" depends="compile.module.fuzzycontrol.production,compile.module.fuzzycontrol.tests" description="Compile module FuzzyControl"/>
+  
+  <target name="compile.module.fuzzycontrol.production" depends="register.custom.compilers" description="Compile module FuzzyControl; production classes">
+    <mkdir dir="${fuzzycontrol.output.dir}"/>
+    <javac2 destdir="${fuzzycontrol.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.fuzzycontrol}/javac">
+      <compilerarg line="${compiler.args.fuzzycontrol}"/>
+      <bootclasspath refid="fuzzycontrol.module.bootclasspath"/>
+      <classpath refid="fuzzycontrol.module.production.classpath"/>
+      <src refid="fuzzycontrol.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.fuzzycontrol"/>
+    </javac2>
+    
+    <copy todir="${fuzzycontrol.output.dir}">
+      <fileset dir="${module.fuzzycontrol.basedir}">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.fuzzycontrol.tests" depends="register.custom.compilers,compile.module.fuzzycontrol.production" description="compile module FuzzyControl; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.fuzzycontrol" description="cleanup module">
+    <delete dir="${fuzzycontrol.output.dir}"/>
+    <delete dir="${fuzzycontrol.testoutput.dir}"/>
+  </target>
+</project>

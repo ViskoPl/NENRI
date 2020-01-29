@@ -35,14 +35,16 @@ public class NN {
     public int getNumberOfParameters() {
         int number = 0;
         for(int i = 0; i < this.layers.length-1; i++) {
-            number += this.layers[i] * this.layers[i+1] + this.layers[i+1];
+            number += this.layers[i] * this.layers[i+1];
             if(i == 1) {
                 number += 2 * layers[i];
             }
-            if(i != 0) {
+            if(i != 0 && i != 1) {
                 number += this.layers[i];
             }
         }
+
+        number += 3;
 
         return number;
     }
@@ -75,19 +77,22 @@ public class NN {
         int previousLayerLastIndex = 0;
         for(int i = 1; i < layers.length; i++) {
             y = new double[layers[i]];
+            int change = 0;
             for(int j = 0; j < layers[i]; j++) {
+                change = previousLayerLastIndex + j * layers[i-1] + layers[i-1];
                 if(i == 1) {
-                    double[] slice = ArrayHelpers.getSliceOfArray(params, previousLayerLastIndex + j * layers[i-1],previousLayerLastIndex + j * layers[i-1] + layers[i-1] + 2);
+                    change +=2;
+                    double[] slice = ArrayHelpers.getSliceOfArray(params, previousLayerLastIndex + j * layers[i-1], change);
                     y[j] = calculateDistance(slice);
                 } else {
-                    double[] slice = ArrayHelpers.getSliceOfArray(params, previousLayerLastIndex + j * layers[i-1],previousLayerLastIndex + j * layers[i-1] + layers[i-1]);
+                    double[] slice = ArrayHelpers.getSliceOfArray(params, previousLayerLastIndex + j * layers[i-1],change);
                     y[j] = calculateSigm(slice);
                 }
             }
 
             setOutputs(y);
 
-            previousLayerLastIndex = previousLayerLastIndex + layers[i] * layers[i-1];
+            previousLayerLastIndex = change;
 
 
         }

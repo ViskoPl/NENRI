@@ -1,0 +1,4 @@
+java -jar /users/viskoplenkovic/Desktop/FER/nenri-visko/src/FuzzyControl/FuzzyControl.jar
+1
+20
+10

@@ -1,7 +1,10 @@
 package Simulator.Rules;
 
 import Simulator.Helpers.MatrixMultiply;
-import zad2.IFuzzySet;
+import Simulator.Systems.IFuzzySystem;
+import FuzzyOperations.zad2.IFuzzySet;
+import FuzzyOperations.zad2.MutableFuzzySet;
+import FuzzyOperations.zad3.Operations;
 
 public class ImplicitExpression{
     IRule antecedent;

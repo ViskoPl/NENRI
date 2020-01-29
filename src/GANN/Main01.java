@@ -16,7 +16,8 @@ public class Main01 {
         layers[2] = 3;
         Dataset set = new Dataset("./src/GANN/datasets/datasets.txt");
         NN net = new NN(layers, set);
-        GeneticAlgorithm demo = new GeneticAlgorithm(60, 0.1, 0.05, true, net, 2, 250, 100000, 2, 1, 1);
+        System.out.println(net.getNumberOfParameters());
+        GeneticAlgorithm demo = new GeneticAlgorithm(55, 0.05, 0.05, true, net, 1, 250, 500000, 2, 1, 1);
         demo.start();
 
         double[] xy = new double[2];
@@ -40,6 +41,8 @@ public class Main01 {
                 System.out.println(Arrays.toString(demo.calculateOutput((xy))));
             }
         }
+
+        System.out.println(Arrays.toString(demo.returnFittest().getWeightArray()));
 
     }
 }

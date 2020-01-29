@@ -1,7 +1,10 @@
 package Simulator.Rules;
 
-import zad1.DomainElement;
-import zad2.IFuzzySet;
+import Simulator.Systems.IFuzzySystem;
+import FuzzyOperations.zad2.IFuzzySet;
+import FuzzyOperations.zad2.MutableFuzzySet;
+import FuzzyOperations.zad1.DomainElement;
+import FuzzyOperations.zad3.Operations;
 
 public class Rule implements IRule {
     IFuzzySet set;
@@ -22,7 +25,7 @@ public class Rule implements IRule {
         return this.type;
     }
 
-    public int getValue(int L, int LK, int D, int DK, int V, int S) {
+    public int getValue(int L, int D, int LK, int DK, int V, int S) {
         switch (this.type) {
             case "L":
                 return L;

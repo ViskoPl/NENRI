@@ -6,14 +6,17 @@ import Simulator.Decoders.COADefuzzifier;
 import Simulator.Decoders.IDecoder;
 import Simulator.Helpers.Sets;
 import Simulator.Systems.AccelerationFuzzySystem;
+import Simulator.Systems.HelmFuzzySystem;
 import Simulator.Systems.IFuzzySystem;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         Sets set = new Sets();
@@ -23,9 +26,9 @@ public class Main {
         IDecoder def = new COADefuzzifier();
 
         IFuzzySystem accSystem = new AccelerationFuzzySystem(def, new AccelerationDatabase());
-        IFuzzySystem hemlSystem = new AccelerationFuzzySystem(def, new HelmDatabase());
+        IFuzzySystem hemlSystem = new HelmFuzzySystem(def, new HelmDatabase());
         while(true){
-            if((line = input.readLine()) != null){
+            if((line = input.readLine())!=null){
                 if(line.charAt(0)=='K') break;
                 Scanner s = new Scanner(line);
                 L = s.nextInt();
@@ -35,19 +38,12 @@ public class Main {
                 V = s.nextInt();
                 S = s.nextInt();
             }
-
-            System.out.println(L + " " + D + " " + LK + " " + DK + " " + V + " " + S);
-
-
-
             double A = accSystem.conclude(L, D, LK, DK, V, S);
             double K = hemlSystem.conclude(L, D, LK, DK, V, S);
-
 
             System.out.println(A + " " + K);
             System.out.flush();
         }
 
-        return;
     }
 }

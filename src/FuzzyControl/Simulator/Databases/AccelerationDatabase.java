@@ -4,8 +4,8 @@ import Simulator.Helpers.Sets;
 import Simulator.Rules.CombinedRule;
 import Simulator.Rules.ImplicitExpression;
 import Simulator.Rules.Rule;
-import zad2.IFuzzySet;
-import zad3.Operations;
+import FuzzyOperations.zad2.IFuzzySet;
+import FuzzyOperations.zad3.Operations;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,13 +23,78 @@ public class AccelerationDatabase implements IDatabase {
     public void fillRules() {
         rules = new ArrayList<>();
 
+
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("V").get(0), "V"),
+//                Sets.sets.get("A").get(0)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("V").get(1), "V"),
+//                Sets.sets.get("A").get(0)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("V").get(2), "V"),
+//                Sets.sets.get("A").get(0)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("V").get(3), "V"),
+//                Sets.sets.get("A").get(0)
+//        ));
+//
+//
+//        rules.add(new ImplicitExpression(
+//            new Rule(Sets.sets.get("V").get(4), "V"),
+//            Sets.sets.get("A").get(0)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("D").get(2), "D"),
+//                Sets.sets.get("A").get(2)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("D").get(2), "L"),
+//                Sets.sets.get("A").get(2)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("D").get(2), "LK"),
+//                Sets.sets.get("A").get(2)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("D").get(2), "DK"),
+//                Sets.sets.get("A").get(2)
+//        ));
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("D").get(1), "D"),
+//                Sets.sets.get("A").get(0)
+//        ));
+//
+//
+//        rules.add(new ImplicitExpression(
+//                new Rule(Sets.sets.get("D").get(1), "L"),
+//                Sets.sets.get("A").get(0)
+//        ));
+//
+//
+        rules.add(new ImplicitExpression(
+                new Rule(Sets.sets.get("V").get(1), "V"),
+                Sets.sets.get("A").get(3)
+        ));
+
+
         rules.add(new ImplicitExpression(
                 new Rule(Sets.sets.get("V").get(0), "V"),
                 Sets.sets.get("A").get(6)
         ));
 
         rules.add(new ImplicitExpression(
-                new Rule(Sets.sets.get("V").get(2), "V"),
+                new Rule(Sets.sets.get("V").get(1), "V"),
                 Sets.sets.get("A").get(4)
         ));
 
@@ -47,13 +112,11 @@ public class AccelerationDatabase implements IDatabase {
                 new Rule(nVC, "L"),
                 new Rule(nVC, "DK")
         ), Sets.sets.get("A").get(4) ));
-
+        IFuzzySet s = Operations.unaryOperation(Operations.binaryOperation(Operations.binaryOperation(Sets.sets.get("D").get(6),  Sets.sets.get("D").get(5), Operations.zadehOr()), Sets.sets.get("D").get(4), Operations.zadehOr()), Operations.zadehNot());
         rules.add(new ImplicitExpression(new CombinedRule(
                 new Rule(Operations.binaryOperation(Sets.sets.get("V").get(3), Sets.sets.get("V").get(4), Operations.zadehOr()), "V"),
-                new CombinedRule(
-                        new Rule(Operations.unaryOperation(Operations.binaryOperation(Operations.binaryOperation(Sets.sets.get("D").get(6),  Sets.sets.get("D").get(5), Operations.zadehOr()), Sets.sets.get("D").get(4), Operations.zadehOr()), Operations.zadehNot()), "LK"),
-                        new Rule(Operations.unaryOperation(Operations.binaryOperation(Operations.binaryOperation(Sets.sets.get("D").get(6),  Sets.sets.get("D").get(5), Operations.zadehOr()), Sets.sets.get("D").get(4), Operations.zadehOr()), Operations.zadehNot()), "DK")
-                )
+                new Rule(Operations.binaryOperation())
+                new Rule(Operations.unaryOperation(Operations.binaryOperation(Operations.binaryOperation(Sets.sets.get("D").get(6),  Sets.sets.get("D").get(5), Operations.zadehOr()), Sets.sets.get("D").get(4), Operations.zadehOr()), Operations.zadehNot()), "DK")
         ), Sets.sets.get("A").get(2)));
 
         rules.add(new ImplicitExpression(

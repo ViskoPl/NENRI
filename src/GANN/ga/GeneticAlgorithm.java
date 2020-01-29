@@ -35,7 +35,7 @@ public class GeneticAlgorithm {
 
     public void start() {
         int iterations = 1;
-        while(population.getFittest().getError() > 10E-6) {
+        while(population.getFittest().getError() > 10E-9) {
             canonicalSelection();
 
             ++iterations;
@@ -129,6 +129,11 @@ public class GeneticAlgorithm {
         }
 
         return takenIndexes;
+    }
+
+
+    public Unit returnFittest() {
+        return this.population.getFittest();
     }
 
     public double[] calculateOutput(double[] xy) {

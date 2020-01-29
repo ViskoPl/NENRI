@@ -1,9 +1,9 @@
 package Simulator.Rules;
 
 import Simulator.Systems.IFuzzySystem;
-import zad2.IFuzzySet;
-import zad2.MutableFuzzySet;
-import zad3.Operations;
+import FuzzyOperations.zad2.IFuzzySet;
+import FuzzyOperations.zad2.MutableFuzzySet;
+import FuzzyOperations.zad3.Operations;
 
 public class CombinedRule implements IRule {
     IRule[] rules;

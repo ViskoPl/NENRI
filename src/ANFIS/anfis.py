@@ -21,8 +21,7 @@ class ANFIS:
     def normalize_value(self, point):
         value = 0
         for rule in self.rules:
-            value += rule.get_first_antecedent().value(
-                point[0]) * rule.get_second_antecedent().value(point[1])
+            value += rule.t_norm(point)
 
         return value
 
@@ -55,7 +54,7 @@ class ANFIS:
     def calc_error(self, function, variables):
         error = 0
         for variable in variables:
-            error += pow(variable[2] - self.value((variable[0], variable[1])), 2)/2
+            error += pow(variable[2] - self.value((variable[0], variable[1])), 2)
 
-        return error
+        return error/2
 
